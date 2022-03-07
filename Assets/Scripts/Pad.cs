@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Pad : MonoBehaviour
 {
     public int id;
-    public string color;
+
     public AudioSource padSound;
-    public string lightColor;
-    public string darkColor;
+    public Color lightColor;
+    public Color darkColor;
 
     // Start is called before the first frame update
     void Start()
@@ -28,10 +29,21 @@ public class Pad : MonoBehaviour
     }
 
     void AddClassSound() {
-
+        ChangePadColor(darkColor);
+        PlaySound();
+        StartCoroutine(RevertPadColor());
     }
 
     void PlaySound() {
+        padSound.Play();
+    }
 
+    void ChangePadColor(Color color) {
+        gameObject.GetComponent<Image>().color = color;
+    }
+
+    IEnumerator RevertPadColor() {
+        yield return new WaitForSeconds(0.5f);
+        ChangePadColor(lightColor);
     }
 }

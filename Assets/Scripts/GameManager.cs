@@ -1,31 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    List<int> userSeq = {};
-    List<int> simonSeq = {};
+    List<int> userSeq = new List<int> {};
+    List<int> simonSeq = new List<int> {};
     int level = 0;
     int userCurrentStep = 0;
+    int simonCurrentStep = 0;
     int highScore = 0;
     bool simonsTurn = false;
 
     // TODO set up timesUp
 
     // 5 seconds for the timer
-    int timer = 5000;
+    float timer = 5.0f;
     bool isGameBoardOn = false;
 
     public Text scoreDisplay;
 
     public Text highScoreDisplay;
 
+    public GameObject[] pads;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // TODO js startButton function
@@ -47,7 +50,10 @@ public class GameManager : MonoBehaviour
     }
 
     void ResetGame() {
-
+        level = 0;
+        simonSeq.Clear();
+        ResetUserInput();
+        StopCoroutine(TimesUp());
     }
 
     void ResetUserInput() {
@@ -56,12 +62,28 @@ public class GameManager : MonoBehaviour
     }
 
     void GetRandomNum() {
-        Random r = new Random();
-        int rInt = r.Next(0,4);
+        int rInt = Random.Range(0,4);
         simonSeq.Add(rInt);
     }
 
-    void ChangePadColor() {
-
+    IEnumerator TimesUp() {
+        yield return new WaitForSeconds(timer);
+        DisplayError();
     }
+
+    IEnumerator PlaySimonSequence() {
+        int colorValue = simonSeq[simonCurrentStep];
+        pads[colorValue].GetComponent<Pad>().AddClassSound();
+        simonCurrentStep++;
+        yield return new WaitForSeconds(1.0f);
+        if (simonCurrentStep >= simonSeq.Length) {
+            simonsTurn = false;
+            simonCurrentStep = 0;
+            StopCoroutine(PlaySimonSequence());
+            StartCoroutine(TimesUp());
+        } else {
+            StartCoroutine(PlaySimonSequence());
+        }
+    }
+
 }
