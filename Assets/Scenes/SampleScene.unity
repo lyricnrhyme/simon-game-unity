@@ -2686,7 +2686,6 @@ GameObject:
   - component: {fileID: 2019450473}
   - component: {fileID: 2019450472}
   - component: {fileID: 2019450474}
-  - component: {fileID: 2019450475}
   m_Layer: 5
   m_Name: OnOffSwitch
   m_TagString: Untagged
@@ -2771,19 +2770,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &2019450475
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2019450470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e4cc620c5fbc5044bcdefbb559a62de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GameManager: {fileID: 1602452630}
 --- !u!1 &2081158100
 GameObject:
   m_ObjectHideFlags: 0
