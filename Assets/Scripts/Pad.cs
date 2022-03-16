@@ -31,7 +31,7 @@ public class Pad : MonoBehaviour {
         StartCoroutine (RevertPadColor ());
     }
 
-    void PlaySound () {
+    public void PlaySound () {
         padSound.Play ();
     }
 

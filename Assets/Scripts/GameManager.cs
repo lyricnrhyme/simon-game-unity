@@ -59,7 +59,19 @@ public class GameManager : MonoBehaviour {
     }
 
     void DisplayError () {
+        scoreDisplay.text = "XX";
+        foreach (GameObject pad in pads) {
+            Pad padScript = pad.GetComponent<Pad> ();
+            padScript.PlaySound();
+        }
 
+        if (level > highScore) {
+            highScore = level;
+            highScoreDisplay.text = highScore >= 10 ? highScore.ToString() : "0" + highScore.ToString();
+        }
+        ResetGame();
+
+        StartCoroutine(ResetScoreDisplay());
     }
 
     void SimonSequence () {
@@ -101,6 +113,11 @@ public class GameManager : MonoBehaviour {
         } else {
             StartCoroutine (PlaySimonSequence ());
         }
+    }
+
+    IEnumerator ResetScoreDisplay () {
+        yield return new WaitForSeconds(1.5f);
+        scoreDisplay.text = "00";
     }
 
 }
