@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
     List<int> userSeq = new List<int> { };
-    List<int> simonSeq = new List<int> { };
+    public List<int> simonSeq = new List<int> { };
     int level = 0;
     int userCurrentStep = 0;
     int simonCurrentStep = 0;
@@ -31,8 +31,11 @@ public class GameManager : MonoBehaviour {
     }
 
     // TODO js startButton function
-    void StartGame () {
-
+    public void StartGame () {
+        if (isGameBoardOn) {
+            ResetGame ();
+            SimonSequence ();
+        }
     }
 
     // TODO js outerSwtich function
