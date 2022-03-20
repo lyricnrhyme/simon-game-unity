@@ -87,6 +87,30 @@ public class GameManager : MonoBehaviour {
                 StartCoroutine (PlaySimonSequence (colorId));
             }
             simonsTurn = false;
+            StartCoroutine (TimesUp ());
+        }
+    }
+
+    public void CheckSimonSequence (GameObject pad) {
+        if (!simonsTurn && isGameBoardOn) {
+            Pad padScript = pad.GetComponent<Pad> ();
+            userSeq.Add (padScript.id);
+            padScript.AddClassSound ();
+            StopCoroutine (TimesUp ());
+
+            if (padScript.id != simonSeq[userCurrentStep]) {
+                DisplayError ();
+            } else {
+                StartCoroutine (TimesUp ());
+                userCurrentStep++;
+
+                if (userSeq.Count == simonSeq.Count) {
+                    level++;
+                    ResetUserInput ();
+                    SimonSequence ();
+                    StopCoroutine (TimesUp ());
+                }
+            }
         }
     }
 

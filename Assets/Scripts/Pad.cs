@@ -20,11 +20,6 @@ public class Pad : MonoBehaviour {
 
     }
 
-    // js pad functionality
-    void CheckSimonSequence () {
-
-    }
-
     public void AddClassSound () {
         ChangePadColor (darkColor);
         PlaySound ();
