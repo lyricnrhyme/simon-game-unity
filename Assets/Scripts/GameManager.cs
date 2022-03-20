@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -62,20 +63,28 @@ public class GameManager : MonoBehaviour {
         scoreDisplay.text = "XX";
         foreach (GameObject pad in pads) {
             Pad padScript = pad.GetComponent<Pad> ();
-            padScript.PlaySound();
+            padScript.PlaySound ();
         }
 
         if (level > highScore) {
             highScore = level;
-            highScoreDisplay.text = highScore >= 10 ? highScore.ToString() : "0" + highScore.ToString();
+            highScoreDisplay.text = highScore >= 10 ? highScore.ToString () : "0" + highScore.ToString ();
         }
-        ResetGame();
+        ResetGame ();
 
-        StartCoroutine(ResetScoreDisplay());
+        StartCoroutine (ResetScoreDisplay ());
     }
 
     void SimonSequence () {
-
+        if (isGameBoardOn) {
+            simonsTurn = true;
+            scoreDisplay.text = level >= 10 ? level.ToString () : "0" + level.ToString ();
+            GetRandomNum ();
+            foreach (int colorId in simonSeq) {
+                StartCoroutine (PlaySimonSequence (colorId));
+            }
+            simonsTurn = false;
+        }
     }
 
     void ResetGame () {
@@ -91,7 +100,7 @@ public class GameManager : MonoBehaviour {
     }
 
     void GetRandomNum () {
-        int rInt = Random.Range (0, 4);
+        int rInt = UnityEngine.Random.Range (0, 4);
         simonSeq.Add (rInt);
     }
 
@@ -100,24 +109,30 @@ public class GameManager : MonoBehaviour {
         DisplayError ();
     }
 
-    IEnumerator PlaySimonSequence () {
-        int colorValue = simonSeq[simonCurrentStep];
-        pads[colorValue].GetComponent<Pad> ().AddClassSound ();
-        simonCurrentStep++;
-        yield return new WaitForSeconds (1.0f);
-        if (simonCurrentStep >= simonSeq.Count) {
-            simonsTurn = false;
-            simonCurrentStep = 0;
-            StopCoroutine (PlaySimonSequence ());
-            StartCoroutine (TimesUp ());
-        } else {
-            StartCoroutine (PlaySimonSequence ());
-        }
-    }
+    // IEnumerator PlaySimonSequence () {
+    //     int colorValue = simonSeq[simonCurrentStep];
+    //     pads[colorValue].GetComponent<Pad> ().AddClassSound ();
+    //     simonCurrentStep++;
+    //     yield return new WaitForSeconds (1.0f);
+    //     if (simonCurrentStep >= simonSeq.Count) {
+    //         simonsTurn = false;
+    //         simonCurrentStep = 0;
+    //         StopCoroutine (PlaySimonSequence ());
+    //         StartCoroutine (TimesUp ());
+    //     } else {
+    //         StartCoroutine (PlaySimonSequence ());
+    //     }
+    // }
 
     IEnumerator ResetScoreDisplay () {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds (1.5f);
         scoreDisplay.text = "00";
+    }
+
+    IEnumerator PlaySimonSequence (int id) {
+        GameObject colorPad = Array.Find (pads, pad => pad.GetComponent<Pad> ().id == id);
+        colorPad.GetComponent<Pad> ().AddClassSound ();
+        yield return new WaitForSeconds (1.0f);
     }
 
 }
