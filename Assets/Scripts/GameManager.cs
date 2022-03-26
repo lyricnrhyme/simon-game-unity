@@ -142,8 +142,6 @@ public class GameManager : MonoBehaviour
         {
             isGameInSession = true;
             simonsTurn = true;
-            scoreDisplay.text =
-                level >= 10 ? level.ToString() : "0" + level.ToString();
             GetRandomNum();
             StartCoroutine(PlaySimonSequence());
             timerTriggered = true;
@@ -178,6 +176,10 @@ public class GameManager : MonoBehaviour
                     if (userSeq.Count == simonSeq.Count)
                     {
                         level++;
+                        scoreDisplay.text =
+                            level >= 10
+                                ? level.ToString()
+                                : "0" + level.ToString();
                         StartCoroutine(NextLevelSimonSequence());
                     }
                 }
