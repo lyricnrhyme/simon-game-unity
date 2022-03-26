@@ -13,8 +13,6 @@ public class GameManager : MonoBehaviour {
     int highScore = 0;
     bool simonsTurn = false;
 
-    // TODO set up timesUp
-
     // 5 seconds for the timer
     float timer = 5.0f;
     bool isGameBoardOn = false;
@@ -25,12 +23,28 @@ public class GameManager : MonoBehaviour {
     public GameObject onOffSwitch;
     Animator onOffSwitchAnimator;
 
+    Coroutine timesUp;
+    bool timerTriggered = false;
+    bool timerStopped = false;
+
     // Start is called before the first frame update
     void Start () {
         onOffSwitchAnimator = onOffSwitch.GetComponent<Animator> ();
     }
 
-    // TODO js startButton function
+    void Update() {
+        if (timerTriggered) {
+            if (timesUp != null) StopCoroutine(timesUp);
+            timesUp = StartCoroutine(TimesUp());
+            timerTriggered = false;
+        }
+
+        if (timerStopped) {
+            if (timesUp != null) StopCoroutine(timesUp);
+            timerStopped = false;
+        }
+    }
+
     public void StartGame () {
         if (isGameBoardOn) {
             ResetGame ();
@@ -84,7 +98,7 @@ public class GameManager : MonoBehaviour {
             GetRandomNum ();
             StartCoroutine(PlaySimonSequence());
             simonsTurn = false;
-            StartCoroutine (TimesUp ());
+            timerTriggered = true;
         } else {
             simonsTurn = false;
         }
@@ -95,12 +109,12 @@ public class GameManager : MonoBehaviour {
             Pad padScript = pad.GetComponent<Pad> ();
             userSeq.Add (padScript.id);
             padScript.AddClassSound ();
-            StopCoroutine (TimesUp ());
+            timerStopped = true;
 
             if (padScript.id != simonSeq[userCurrentStep]) {
                 DisplayError ();
             } else {
-                StartCoroutine (TimesUp ());
+                timerTriggered = true;
                 userCurrentStep++;
 
                 if (userSeq.Count == simonSeq.Count) {
@@ -115,7 +129,7 @@ public class GameManager : MonoBehaviour {
         level = 0;
         simonSeq.Clear ();
         ResetUserInput ();
-        StopCoroutine (TimesUp ());
+        timerStopped = true;
     }
 
     void ResetUserInput () {
@@ -134,10 +148,10 @@ public class GameManager : MonoBehaviour {
     }
 
     IEnumerator NextLevelSimonSequence() {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.0f);
         ResetUserInput();
         SimonSequence();
-        StopCoroutine(TimesUp());
+        timerStopped = true;
     }
 
     IEnumerator PlaySimonSequence () {
@@ -149,7 +163,7 @@ public class GameManager : MonoBehaviour {
             simonsTurn = false;
             simonCurrentStep = 0;
             StopCoroutine (PlaySimonSequence ());
-            StartCoroutine (TimesUp ());
+            timerTriggered = true;
         } else {
             StartCoroutine (PlaySimonSequence ());
         }
