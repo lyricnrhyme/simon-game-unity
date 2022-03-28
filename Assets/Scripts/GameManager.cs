@@ -23,7 +23,8 @@ public class GameManager : MonoBehaviour
     // 5 seconds for the timer
     float timer = 5.0f;
 
-    bool isGameBoardOn = false;
+    [HideInInspector]
+    public static bool isGameBoardOn = false;
 
     public Text scoreDisplay;
 

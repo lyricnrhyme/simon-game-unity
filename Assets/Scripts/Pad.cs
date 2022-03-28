@@ -36,6 +36,6 @@ public class Pad : MonoBehaviour {
 
     IEnumerator RevertPadColor () {
         yield return new WaitForSeconds (0.5f);
-        ChangePadColor (lightColor);
+        if (GameManager.isGameBoardOn) ChangePadColor (lightColor);
     }
 }
